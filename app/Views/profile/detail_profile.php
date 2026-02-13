@@ -221,16 +221,17 @@
             <span class="close-icon" id="closeModalX">&times;</span>
             <h3>Edit your info</h3>
 
-            <form id="editForm">
+            <form action="/profile/edit" method="post">
+                <?= csrf_field() ?>
                 <!-- username -->
                 <div class="form-group">
                     <label for="edit-username">Username</label>
-                    <input type="text" id="edit-username" name="username" value="johndoe">
+                    <input type="text" id="edit-username" name="username" value="<?= $user['username'] ?>">
                 </div>
                 <!-- email -->
                 <div class="form-group">
                     <label for="edit-email">Email</label>
-                    <input type="email" id="edit-email" name="email" value="john@example.com">
+                    <input type="email" id="edit-email" name="email" value="<?= $user['email'] ?>">
                 </div>
                 <!-- new password -->
                 <div class="form-group">
@@ -240,12 +241,12 @@
                 <!-- current password (for editing) -->
                 <div class="form-group">
                     <label for="current-password">Current password</label>
-                    <input type="password" id="current-password" name="current_password" placeholder="Required to save changes">
+                    <input type="password" id="current-password" name="current_password" placeholder="Required to save changes" required>
                 </div>
 
                 <div class="modal-actions">
                     <!-- SAVED / SAVE BUTTON -->
-                    <button type="button" class="btn btn-primary" id="saveBtn">Saved</button>
+                    <button type="submit" class="btn btn-primary" id="saveBtn">Saved</button>
                     <!-- CANCEL BUTTON -->
                     <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
                 </div>
@@ -291,15 +292,6 @@
                 if (e.target === modal) {
                     closeModal();
                 }
-            });
-
-            // ----- save button action (just demo) -----
-            saveBtn.addEventListener('click', function(e) {
-                e.preventDefault();
-                // very simple: alert with dummy message, then close modal
-                alert('Changes saved (demo).');
-                closeModal();
-                // (the account detail fields are not updated – this is just the view)
             });
 
             // optional: prevent form submission if enter pressed (since we have type="button")
