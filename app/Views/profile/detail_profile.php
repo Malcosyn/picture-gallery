@@ -237,6 +237,103 @@
             /* Muted gray color */
             margin-bottom: 0;
         }
+
+        /* The Dark Background Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            /* Semi-transparent black */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            /* Sit on top of everything */
+        }
+
+        /* The White Box */
+        .modal-box {
+            background: white;
+            padding: 25px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+
+            /* NEW: Align everything to the left by default */
+            text-align: left;
+        }
+
+        /* Title Styling */
+        .modal-title {
+            color: #dc3545;
+            /* Red color for danger */
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        /* Warning Text Styling */
+        .modal-warning {
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+            /* Ensures padding doesn't break width */
+        }
+
+        /* Button Container */
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+
+            /* NEW: Push buttons to the right side */
+            justify-content: flex-end;
+
+            margin-top: 10px;
+        }
+
+        /* Delete Button (Red) */
+        .btn-confirm-delete {
+            padding: 10px 20px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .btn-confirm-delete:hover {
+            background: #c82333;
+        }
+
+        /* Cancel Button (Gray) */
+        .btn-cancel {
+            padding: 10px 20px;
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn-cancel:hover {
+            background: #e2e6ea;
+        }
     </style>
 </head>
 
@@ -264,12 +361,7 @@
         <hr class="card-separator">
 
         <div class="danger-zone">
-            <form action="<?= base_url('profile/delete') ?>" method="post" onsubmit="return confirm('Are you sure you want to delete your account? All photos will be lost permanently.');">
-                <?= csrf_field() ?>
-
-                <button type="submit" class="btn-delete-full">Delete Account</button>
-            </form>
-
+            <button type="button" class="btn-delete-full" onclick="openDeleteModal()">Delete Account</button>
             <p class="warning-text">Once you delete your account, there is no going back.</p>
         </div>
     </div>
@@ -316,6 +408,28 @@
         </div>
     </div>
 
+    <div id="deleteModal" class="modal-overlay" style="display: none;">
+        <div class="modal-box">
+            <h3 class="modal-title">Delete Account</h3>
+            <p class="modal-warning">This action is <strong>permanent</strong>. All your photos and data will be wiped immediately.</p>
+
+            <form action="/profile/delete" method="post">
+                <?= csrf_field() ?>
+                <input type="hidden" name="_method" value="DELETE">
+
+                <div class="form-group">
+                    <label for="confirm-password" style="display:block; text-align: left; margin-bottom: 5px;">Password:</label>
+                    <input type="password" name="confirm_password" id="confirm-password" class="form-control" placeholder="Enter password to confirm" required>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="submit" class="btn-confirm-delete">Delete Account</button>
+                    <button type="button" class="btn-cancel" onclick="closeDeleteModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         (function() {
             "use strict";
@@ -358,6 +472,24 @@
             // optional: prevent form submission if enter pressed (since we have type="button")
             // but it's fine.
         })();
+    </script>
+
+    <script>
+        function openDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        // Optional: Close if clicking outside the box
+        window.onclick = function(event) {
+            var modal = document.getElementById('deleteModal');
+            if (event.target == modal) {
+                closeDeleteModal();
+            }
+        }
     </script>
 
     <!-- 

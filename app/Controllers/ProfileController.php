@@ -26,7 +26,7 @@ class ProfileController extends BaseController
         $currentPasswordInput = $this->request->getPost('current_password');
 
         if (!password_verify($currentPasswordInput, $currentUser['password'])) {
-            return redirect()->to('/register')->with('error', 'Password lama salah!');
+            return redirect()->to('/profile')->with('error', 'Password lama salah!');
         }
 
         $updateData = [
@@ -42,6 +42,22 @@ class ProfileController extends BaseController
 
         $model->update($userId, $updateData);
         return redirect()->to('/profile')->with('success', 'Profile updated!');
+    }
+
+    public function delete() {
+        $model = new UserModel();
+        $userId = 4;
+
+        $currentUser = $model->find($userId);
+
+        $confirmPassword = $this->request->getPost('confirm_password');
+
+        if (!password_verify($confirmPassword, $currentUser['password'])) {
+            return redirect()->to('/profile')->with('error', 'Password salah!');
+        }
+
+        $model->delete($userId);
+        return redirect()->to('/register')->with('success', 'Account deleted!');
     }
 
     public function hashPassword($password): String

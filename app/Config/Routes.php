@@ -11,3 +11,4 @@ $routes->post('/register/addNewUser', 'RegisterController::register');
 
 $routes->get('/profile', 'ProfileController::index');
 $routes->post('/profile/edit', 'ProfileController::edit');
+$routes->delete('/profile/delete', 'ProfileController::delete');
