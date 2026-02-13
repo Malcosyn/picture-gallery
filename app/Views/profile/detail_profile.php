@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -28,7 +29,7 @@
             width: 100%;
             padding: 2rem;
             border-radius: 24px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
             border: 1px solid #e2e8f0;
         }
 
@@ -87,7 +88,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.3);
+            background-color: rgba(0, 0, 0, 0.3);
             align-items: center;
             justify-content: center;
             padding: 1rem;
@@ -103,7 +104,7 @@
             width: 100%;
             padding: 2rem;
             border-radius: 28px;
-            box-shadow: 0 20px 35px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
             border: 1px solid #e9eef3;
         }
 
@@ -189,8 +190,56 @@
         .close-icon:hover {
             color: #475569;
         }
+
+        /* The container for the bottom section */
+        .danger-zone {
+            margin-top: 20px;
+            text-align: center;
+            /* Centers the text below the button */
+        }
+
+        .card-separator {
+            margin: 20px 0;
+            border: 0;
+            border-top: 1px solid #eee;
+        }
+
+        /* The Full Width Button */
+        .btn-delete-full {
+            width: 100%;
+            /* Takes up full card width */
+            display: block;
+            padding: 12px;
+            background-color: #fff;
+            color: #dc3545;
+            /* Red text */
+            border: 1px solid #dc3545;
+            /* Red border */
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+        }
+
+        /* Hover Effect */
+        .btn-delete-full:hover {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        /* The Warning Text */
+        .warning-text {
+            margin-top: 10px;
+            /* Space between button and text */
+            font-size: 0.85rem;
+            color: #6c757d;
+            /* Muted gray color */
+            margin-bottom: 0;
+        }
     </style>
 </head>
+
 <body>
 
     <!-- ACCOUNT DETAIL VIEW -->
@@ -199,20 +248,32 @@
 
         <div class="detail-row">
             <span class="label">Username</span>
-            <span class="value" id="display-username"><?= $user['username'] ?></span>
+            <span class="value" id="display-username"><?= esc($user['username']) ?></span>
         </div>
         <div class="detail-row">
             <span class="label">Email</span>
-            <span class="value" id="display-email"><?= $user['email'] ?></span>
+            <span class="value" id="display-email"><?= esc($user['email']) ?></span>
         </div>
         <div class="detail-row">
             <span class="label">Password</span>
             <span class="value" id="display-password">••••••••</span>
         </div>
 
-        <!-- single edit button -->
         <button class="edit-btn" id="openEditModalBtn">✎ Edit account</button>
+
+        <hr class="card-separator">
+
+        <div class="danger-zone">
+            <form action="<?= base_url('profile/delete') ?>" method="post" onsubmit="return confirm('Are you sure you want to delete your account? All photos will be lost permanently.');">
+                <?= csrf_field() ?>
+
+                <button type="submit" class="btn-delete-full">Delete Account</button>
+            </form>
+
+            <p class="warning-text">Once you delete your account, there is no going back.</p>
+        </div>
     </div>
+
 
     <!-- MODAL POPUP (hidden by default) -->
     <div class="modal" id="editModal">
@@ -309,4 +370,5 @@
         - No backend, just the view as requested. 
     -->
 </body>
+
 </html>
