@@ -11,6 +11,7 @@ $routes->post('/register/addNewUser', 'RegisterController::register');
 $routes->get('/login', 'LoginController::index');
 $routes->post('/login/verify', 'LoginController::login');
 
+$routes->get('/logout', 'ProfileController::logout');
 
 $routes->get('/profile', 'ProfileController::index');
 $routes->post('/profile/edit', 'ProfileController::edit');

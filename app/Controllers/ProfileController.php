@@ -62,6 +62,12 @@ class ProfileController extends BaseController
         return redirect()->to('/register')->with('success', 'Account deleted!');
     }
 
+    public function logout()
+    {
+        session()->destroy();
+        return redirect()->to('/login')->with('success', 'Logged out successfully!');
+    }
+
     public function hashPassword($password): String
     {
         return password_hash($password, PASSWORD_DEFAULT);

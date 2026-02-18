@@ -334,6 +334,23 @@
         .btn-cancel:hover {
             background: #e2e6ea;
         }
+
+        .logout-link {
+            display: block;
+            text-align: center;
+            margin-top: 15px;
+            color: #64748b;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        .logout-link:hover {
+            color: #ef4444;
+            /* Berubah jadi merah saat hover */
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -357,6 +374,8 @@
         </div>
 
         <button class="edit-btn" id="openEditModalBtn">✎ Edit account</button>
+
+        <a href="/logout" class="logout-link">Logout from account</a>
 
         <hr class="card-separator">
 
