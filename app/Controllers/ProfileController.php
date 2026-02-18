@@ -10,7 +10,9 @@ class ProfileController extends BaseController
     public function index()
     {
         $model = new UserModel();
-        $user['user'] = $model->find(4);
+
+        $userId = (int) session()->get('user_id');
+        $user['user'] = $model->find($userId);
 
         return view('profile/detail_profile', $user);
     }
@@ -19,7 +21,7 @@ class ProfileController extends BaseController
     public function edit()
     {
         $model = new UserModel();
-        $userId = 4;
+        $userId = (int) session()->get('user_id');
 
         $currentUser = $model->find($userId);
 
@@ -46,7 +48,7 @@ class ProfileController extends BaseController
 
     public function delete() {
         $model = new UserModel();
-        $userId = 4;
+        $userId = (int) session()->get('user_id');
 
         $currentUser = $model->find($userId);
 
