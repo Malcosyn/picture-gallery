@@ -8,6 +8,10 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/register', 'RegisterController::index');
 $routes->post('/register/addNewUser', 'RegisterController::register');
 
+$routes->get('/login', 'LoginController::index');
+$routes->post('/login/verify', 'LoginController::login');
+
+$routes->get('/logout', 'ProfileController::logout');
 
 $routes->get('/profile', 'ProfileController::index');
 $routes->post('/profile/edit', 'ProfileController::edit');
@@ -27,3 +31,4 @@ $routes->get('photos/(:num)',    'PhotoController::show/$1');
 
 $routes->post('photos/(:num)/comments',        'CommentController::store/$1');
 $routes->get('photos/(:num)/comments/(:num)/delete', 'CommentController::delete/$2');
+$routes->get('/dashboard', 'DashboardController::index');
