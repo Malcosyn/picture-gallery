@@ -27,6 +27,9 @@ $routes->get('photos',           'PhotoController::index');
 $routes->get('photos/create',    'PhotoController::create');
 $routes->post('photos/store',    'PhotoController::store');
 $routes->get('photos/(:num)',    'PhotoController::show/$1');
+$routes->get('photos/(:num)/edit',    'PhotoController::edit/$1');
+$routes->post('photos/(:num)/update', 'PhotoController::update/$1');
+$routes->post('photos/(:num)/delete', 'PhotoController::delete/$1');
 
 
 $routes->post('photos/(:num)/comments',        'CommentController::store/$1');
