@@ -72,7 +72,7 @@ class PhotoController extends BaseController
         $file->move(FCPATH . 'uploads/photos', $newName);
 
         $this->photoModel->insert([
-            'album_id'    => null,
+            'album_id'    => 1,
             'category_id' => $this->request->getPost('category_id'),
             'title'       => $this->request->getPost('title'),
             'alt_text'    => $this->request->getPost('alt_text'),
