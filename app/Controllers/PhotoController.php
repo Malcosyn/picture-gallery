@@ -84,6 +84,89 @@ class PhotoController extends BaseController
         return redirect()->to('/photos')->with('success', 'Photo uploaded successfully.');
     }
 
+    public function edit(int $id)
+{
+    $photo = $this->photoModel->find($id);
+
+    if (!$photo) {
+        throw new \CodeIgniter\Exceptions\PageNotFoundException("Photo #$id not found.");
+    }
+
+    return view('photos/edit', [
+        'title'      => 'Edit Photo',
+        'photo'      => $photo,
+        'categories' => (new CategoryModel())->findAll(),
+        'validation' => \Config\Services::validation(),
+    ]);
+}
+
+public function update(int $id)
+{
+    $photo = $this->photoModel->find($id);
+
+    if (!$photo) {
+        throw new \CodeIgniter\Exceptions\PageNotFoundException("Photo #$id not found.");
+    }
+
+    if (!$this->validate([
+        'category_id' => 'required|is_natural_no_zero',
+        'title'       => 'permit_empty|max_length[255]',
+        'alt_text'    => 'permit_empty|max_length[255]',
+        'image'       => 'permit_empty|is_image[image]|max_size[image,5120]',
+    ])) {
+        return view('photos/edit', [
+            'title'      => 'Edit Photo',
+            'photo'      => $photo,
+            'categories' => (new CategoryModel())->findAll(),
+            'validation' => $this->validator,
+        ]);
+    }
+
+    $data = [
+        'category_id' => $this->request->getPost('category_id'),
+        'title'       => $this->request->getPost('title'),
+        'alt_text'    => $this->request->getPost('alt_text'),
+    ];
+
+   
+    $file = $this->request->getFile('image');
+    if ($file && $file->isValid() && !$file->hasMoved()) {
+        
+        $oldPath = FCPATH . $photo['image_path'];
+        if (file_exists($oldPath)) {
+            unlink($oldPath);
+        }
+
+        $newName = $file->getRandomName();
+        $file->move(FCPATH . 'uploads/photos', $newName);
+        $data['image_path'] = 'uploads/photos/' . $newName;
+        $data['file_size']  = $file->getSizeByUnit('kb');
+    }
+
+    $this->photoModel->update($id, $data);
+
+    return redirect()->to("/photos/{$id}")->with('success', 'Photo updated successfully.');
+}
+
+public function delete(int $id)
+{
+    $photo = $this->photoModel->find($id);
+
+    if (!$photo) {
+        throw new \CodeIgniter\Exceptions\PageNotFoundException("Photo #$id not found.");
+    }
+
+   
+    $oldPath = FCPATH . $photo['image_path'];
+    if (file_exists($oldPath)) {
+        unlink($oldPath);
+    }
+
+    $this->photoModel->delete($id);
+
+    return redirect()->to('/photos')->with('success', 'Photo deleted.');
+}
+
 
    
 }

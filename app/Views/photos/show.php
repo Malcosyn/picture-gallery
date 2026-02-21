@@ -40,15 +40,21 @@
 
     <div class="photo-card">
         <img src="/<?= esc($photo['image_path']) ?>" alt="<?= esc($photo['alt_text'] ?? $photo['title']) ?>">
-        <div class="photo-info">
+       <div class="photo-info">
             <h1><?= esc($photo['title'] ?? 'Untitled') ?></h1>
-           <small>
+            <small>
                 <?php if (!empty($photo['album_title'])): ?>
                     Album: <strong><?= esc($photo['album_title']) ?></strong> &bull;
                 <?php endif; ?>
-                    Category: <strong><?= esc($photo['category_name']) ?></strong> &bull;
+                Category: <strong><?= esc($photo['category_name']) ?></strong> &bull;
                 <?= esc($photo['created_at']) ?>
             </small>
+            <div style="margin-top: 0.8rem;">
+                <a href="/photos/<?= esc($photo['id']) ?>/edit"
+                style="background:#4f46e5; color:#fff; padding:0.5rem 1.2rem; border-radius:6px; text-decoration:none; font-size:0.9rem;">
+                     Edit Photo
+                </a>
+            </div>
         </div>
     </div>
 
@@ -69,7 +75,7 @@
                 <a href="/photos/<?= esc($photo['id']) ?>/comments/<?= esc($c['id']) ?>/delete"
                 onclick="return confirm('Delete this comment?')"
                 style="font-size:0.8rem; color:#dc2626; text-decoration:none;">
-                    🗑 Delete
+                    Delete
                 </a>
             </div>
             <p><?= esc($c['comment']) ?></p>
