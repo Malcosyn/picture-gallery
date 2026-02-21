@@ -55,11 +55,23 @@ class PhotoModel extends Model
             ->getResultArray();
     }
 
+    public function getByAlbum(int $albumId)
+    {
+        return $this->db->table('photos p')
+            ->select('p.*, a.title as album_title, c.name as category_name')
+            ->join('albums a', 'a.id = p.album_id', 'left')
+            ->join('categories c', 'c.id = p.category_id')
+            ->where('p.album_id', $albumId)
+            ->orderBy('p.id', 'DESC')
+            ->get()
+            ->getResultArray();
+    }
+
     public function getOneWithDetails(int $id)
     {
         return $this->db->table('photos p')
             ->select('p.*, a.title as album_title, c.name as category_name')
-            ->join('albums a', 'a.id = p.album_id', 'left')  
+            ->join('albums a', 'a.id = p.album_id', 'left')
             ->join('categories c', 'c.id = p.category_id')
             ->where('p.id', $id)
             ->get()
