@@ -11,6 +11,7 @@ class CreatePhoto extends Migration
         $this->forge->addField([
             'id'         => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true, 'auto_increment' => true],
             'album_id'   => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true],
+            'photographer_id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true],
             'category_id' => ['type' => 'INT', 'constraint' => 11, 'unsigned' => true],
             'image_path' => ['type' => 'VARCHAR', 'constraint' => 255], // Path to the file
             'title'      => ['type' => 'VARCHAR', 'constraint' => 255, 'null' => true],
@@ -21,6 +22,7 @@ class CreatePhoto extends Migration
         $this->forge->addKey('id', true);
         $this->forge->addForeignKey('album_id', 'albums', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('category_id', 'categories', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('photographer_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('photos');
     }
 
