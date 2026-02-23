@@ -43,6 +43,7 @@
        <div class="photo-info">
             <h1><?= esc($photo['title'] ?? 'Untitled') ?></h1>
             <small>
+                By: <strong><?= esc($photo['photographer'] ?? 'Unknown') ?></strong> &bull;
                 <?php if (!empty($photo['album_title'])): ?>
                     Album: <strong><?= esc($photo['album_title']) ?></strong> &bull;
                 <?php endif; ?>
