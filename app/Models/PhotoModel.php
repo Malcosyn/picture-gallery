@@ -12,7 +12,7 @@ class PhotoModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['album_id', 'category_id', 'image_path', 'title', 'alt_text', 'file_size', 'created_at'];
+    protected $allowedFields = ['photographer_id', 'album_id', 'category_id', 'image_path', 'title', 'alt_text', 'file_size', 'created_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -47,9 +47,10 @@ class PhotoModel extends Model
     public function getWithDetails()
     {
         return $this->db->table('photos p')
-            ->select('p.*, a.title as album_title, c.name as category_name')
+            ->select('p.*, a.title as album_title, c.name as category_name, u.username as photographer')
             ->join('albums a', 'a.id = p.album_id', 'left')
             ->join('categories c', 'c.id = p.category_id')
+            ->join('users u', 'u.id = p.photographer_id', 'left')
             ->orderBy('p.id', 'DESC')
             ->get()
             ->getResultArray();
@@ -70,9 +71,10 @@ class PhotoModel extends Model
     public function getOneWithDetails(int $id)
     {
         return $this->db->table('photos p')
-            ->select('p.*, a.title as album_title, c.name as category_name')
+            ->select('p.*, a.title as album_title, c.name as category_name, u.username as photographer')
             ->join('albums a', 'a.id = p.album_id', 'left')
             ->join('categories c', 'c.id = p.category_id')
+            ->join('users u', 'u.id = p.photographer_id', 'left')
             ->where('p.id', $id)
             ->get()
             ->getRowArray();
