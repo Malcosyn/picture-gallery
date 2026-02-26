@@ -12,7 +12,7 @@ class PhotoModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields = ['photographer_id', 'album_id', 'category_id', 'image_path', 'title', 'alt_text', 'file_size', 'created_at'];
+    protected $allowedFields    = ['album_id', 'photographer_id', 'category_id', 'image_path', 'title', 'alt_text', 'file_size', 'created_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

@@ -72,14 +72,14 @@ class PhotoController extends BaseController
         $file->move(FCPATH . 'uploads/photos', $newName);
 
         $this->photoModel->insert([
-            'photographer_id' => session()->get('user_id'),
-            'album_id'        => null,
-            'category_id'     => $this->request->getPost('category_id'),
-            'title'           => $this->request->getPost('title'),
-            'alt_text'        => $this->request->getPost('alt_text'),
-            'image_path'      => 'uploads/photos/' . $newName,
-            'file_size'       => $file->getSizeByUnit('kb'),
-            'created_at'      => date('Y-m-d H:i:s'),
+            'album_id'    => 3,
+            'photographer_id' => (int) session()->get('user_id'),
+            'category_id' => $this->request->getPost('category_id'),
+            'title'       => $this->request->getPost('title'),
+            'alt_text'    => $this->request->getPost('alt_text'),
+            'image_path'  => 'uploads/photos/' . $newName,
+            'file_size'   => $file->getSizeByUnit('kb'),
+            'created_at'  => date('Y-m-d H:i:s'),
         ]);
 
         return redirect()->to('/photos')->with('success', 'Photo uploaded successfully.');
