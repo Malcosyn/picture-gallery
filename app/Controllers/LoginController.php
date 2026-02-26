@@ -22,7 +22,7 @@ class LoginController extends BaseController
         
         if ($user && password_verify($password, $user['password'])) {
             session()->set('user_id', $user['id']);
-            return redirect()->to('/dashboard')->with('success', 'Login successful!');
+            return redirect()->to('/photos')->with('success', 'Login successful!');
         } else {
             return redirect()->to('/login')->with('error', 'Invalid email or password.');
         }
