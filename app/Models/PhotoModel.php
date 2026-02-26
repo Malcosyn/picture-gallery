@@ -47,9 +47,10 @@ class PhotoModel extends Model
     public function getWithDetails()
     {
         return $this->db->table('photos p')
-            ->select('p.*, a.title as album_title, c.name as category_name')
+            ->select('p.*, a.title as album_title, c.name as category_name, u.username as photographer')
             ->join('albums a', 'a.id = p.album_id', 'left')
             ->join('categories c', 'c.id = p.category_id')
+            ->join('users u', 'u.id = p.photographer_id', 'left')
             ->orderBy('p.id', 'DESC')
             ->get()
             ->getResultArray();
@@ -70,9 +71,10 @@ class PhotoModel extends Model
     public function getOneWithDetails(int $id)
     {
         return $this->db->table('photos p')
-            ->select('p.*, a.title as album_title, c.name as category_name')
+            ->select('p.*, a.title as album_title, c.name as category_name, u.username as photographer')
             ->join('albums a', 'a.id = p.album_id', 'left')
             ->join('categories c', 'c.id = p.category_id')
+            ->join('users u', 'u.id = p.photographer_id', 'left')
             ->where('p.id', $id)
             ->get()
             ->getRowArray();
