@@ -37,4 +37,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('photos/(:num)/comments',        'CommentController::store/$1');
     $routes->get('photos/(:num)/comments/(:num)/delete', 'CommentController::delete/$2');
     $routes->get('/dashboard', 'DashboardController::index');
+
+    $routes->get('photos/(:num)/reports/create', 'ReportController::create/$1');
+    $routes->post('photos/(:num)/reports',        'ReportController::store/$1');
 });
