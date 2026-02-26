@@ -10,7 +10,7 @@ class AlbumSeeder extends Seeder
     {
         $data = [
             [
-                'photographer_id' => 5,
+                'photographer_id' => 1,
                 'title'           => 'Pemandangan Alam Bromo',
                 'description'     => 'Koleksi foto matahari terbit di penanjakan Gunung Bromo.',
                 'is_public'       => 1,
