@@ -38,6 +38,11 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('photos/(:num)/comments/(:num)/delete', 'CommentController::delete/$2');
     $routes->get('/dashboard', 'DashboardController::index');
 
+    $routes->get('/albums', 'AlbumController::showAllAlbum');
+    $routes->get('/albums/search', 'AlbumController::searchAlbum');
+    $routes->post('/albums/create', 'AlbumController::createAlbum');
+    $routes->post('/albums/delete', 'AlbumController::deleteAlbum');
+    $routes->post('/albums/update', 'AlbumController::updateAlbum');
     $routes->get('photos/(:num)/reports/create', 'ReportController::create/$1');
     $routes->post('photos/(:num)/reports',        'ReportController::store/$1');
 });
