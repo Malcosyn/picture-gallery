@@ -27,6 +27,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
+            gap: 1.5rem;
             min-height: 100vh;
             padding: 1.5rem;
             color: #1e293b;
@@ -83,6 +85,94 @@
             font-size: 0.95rem;
             font-weight: 600;
             color: var(--primary);
+        }
+
+        /* Album Grid */
+        .album-section {
+            max-width: 960px;
+            width: 100%;
+        }
+
+        .album-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.85rem;
+        }
+
+        .album-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 0.85rem;
+        }
+
+        .album-add-btn {
+            border: none;
+            background: var(--primary);
+            color: white;
+            padding: 0.55rem 0.9rem;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .album-add-btn:hover {
+            background: #1e293b;
+            transform: translateY(-1px);
+        }
+
+        .album-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
+        }
+
+        .album-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 1.25rem 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.12);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .album-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px -12px rgba(0, 0, 0, 0.18);
+        }
+
+        .album-icon {
+            width: 44px;
+            height: 44px;
+            display: grid;
+            place-items: center;
+            border-radius: 12px;
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        .album-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+        }
+
+        .album-empty {
+            padding: 0.85rem 1.25rem;
+            font-size: 0.85rem;
+            color: var(--secondary);
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #f1f5f9;
         }
 
         /* Buttons */
@@ -230,6 +320,55 @@
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
         }
 
+        .switch-row {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background-color: #e2e8f0;
+            border-radius: 999px;
+            transition: background-color 0.2s ease;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            top: 3px;
+            background-color: white;
+            border-radius: 50%;
+            transition: transform 0.2s ease;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        }
+
+        .switch input:checked + .slider {
+            background-color: #22c55e;
+        }
+
+        .switch input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
         .modal-actions {
             display: flex;
             gap: 0.75rem;
@@ -309,6 +448,62 @@
         </div>
     </div>
 
+    <div class="album-section">
+        <div class="album-header">
+            <div class="album-title">Albums</div>
+            <button class="album-add-btn" id="openAddAlbumModalBtn" type="button">Add Album</button>
+        </div>
+        <?php if (!empty($albums)): ?>
+            <div class="album-grid">
+                <?php foreach ($albums as $album): ?>
+                    <div class="album-card">
+                        <div class="album-icon" aria-hidden="true">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
+                            </svg>
+                        </div>
+                        <div class="album-name"><?= esc($album['title']) ?></div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <div class="album-empty">No albums found.</div>
+        <?php endif; ?>
+    </div>
+
+    <div class="modal" id="addAlbumModal">
+        <div class="modal-content">
+            <span class="close-icon" id="closeAddAlbumModalX">&times;</span>
+            <h3>Add Album</h3>
+
+            <form action="/albums/create" method="post">
+                <?= csrf_field() ?>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="title" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" name="description">
+                </div>
+                <div class="form-group">
+                    <div class="switch-row">
+                        <label for="album-public">Public</label>
+                        <label class="switch">
+                            <input id="album-public" type="checkbox" name="is_public" value="1">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelAddAlbumBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <div class="modal" id="editModal">
         <div class="modal-content">
             <span class="close-icon" id="closeModalX">&times;</span>
@@ -370,11 +565,19 @@
         const openBtn = document.getElementById('openEditModalBtn');
         const closeX = document.getElementById('closeModalX');
         const cancelBtn = document.getElementById('cancelBtn');
+        const addAlbumModal = document.getElementById('addAlbumModal');
+        const openAddAlbumBtn = document.getElementById('openAddAlbumModalBtn');
+        const closeAddAlbumX = document.getElementById('closeAddAlbumModalX');
+        const cancelAddAlbumBtn = document.getElementById('cancelAddAlbumBtn');
 
         openBtn.onclick = () => modal.classList.add('show');
         closeX.onclick = cancelBtn.onclick = () => modal.classList.remove('show');
+        if (openAddAlbumBtn) openAddAlbumBtn.onclick = () => addAlbumModal.classList.add('show');
+        if (closeAddAlbumX) closeAddAlbumX.onclick = () => addAlbumModal.classList.remove('show');
+        if (cancelAddAlbumBtn) cancelAddAlbumBtn.onclick = () => addAlbumModal.classList.remove('show');
         window.onclick = (e) => {
             if (e.target === modal) modal.classList.remove('show');
+            if (e.target === addAlbumModal) addAlbumModal.classList.remove('show');
             if (e.target === document.getElementById('deleteModal')) closeDeleteModal();
         }
 

@@ -34,4 +34,40 @@ class AlbumController extends BaseController
 
         return redirect()->to('/albums')->with('success', 'Album deleted!');
     }
+
+    public function updateAlbum() {
+        $albumId = $this->request->getPost('album_id');
+        $title = $this->request->getPost('title');
+        $description = $this->request->getPost('description');
+        $isPublic = $this->request->getPost('is_public') ? 1 : 0;
+
+        $model = new AlbumModel();
+        $model->update($albumId, [
+            'title' => $title,
+            'description' => $description,
+            'is_public' => $isPublic,
+        ]);
+
+        return redirect()->to('/profile')->with('success', 'Album updated!');
+        
+    }
+
+    public function createAlbum() {
+        $photographerId = (int) session()->get('user_id');
+        $title = $this->request->getPost('title');
+        $description = $this->request->getPost('description');
+        $isPublic = $this->request->getPost('is_public') ? 1 : 0;
+        $createdAt = date('Y-m-d H:i:s');
+
+        $model = new AlbumModel();
+        $model->insert([
+            'photographer_id' => $photographerId,
+            'title' => $title,
+            'description' => $description,
+            'is_public' => $isPublic,
+            'created_at' => $createdAt,
+        ]);
+
+        return redirect()->to('/profile')->with('success', 'Album created!');
+    }
 }

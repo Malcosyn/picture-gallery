@@ -37,4 +37,10 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('photos/(:num)/comments',        'CommentController::store/$1');
     $routes->get('photos/(:num)/comments/(:num)/delete', 'CommentController::delete/$2');
     $routes->get('/dashboard', 'DashboardController::index');
+
+    $routes->get('/albums', 'AlbumController::showAllAlbum');
+    $routes->get('/albums/search', 'AlbumController::searchAlbum');
+    $routes->post('/albums/create', 'AlbumController::createAlbum');
+    $routes->post('/albums/delete', 'AlbumController::deleteAlbum');
+    $routes->post('/albums/update', 'AlbumController::updateAlbum');
 });

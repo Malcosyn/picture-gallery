@@ -29,6 +29,6 @@ class RegisterController extends BaseController
             'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
-        return redirect()->to('/register')->with('success', 'User berhasil ditambahkan');
+        return redirect()->to('/login')->with('success', 'User berhasil ditambahkan');
     }
 }
