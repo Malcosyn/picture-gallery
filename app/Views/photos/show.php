@@ -50,10 +50,14 @@
                 Category: <strong><?= esc($photo['category_name']) ?></strong> &bull;
                 <?= esc($photo['created_at']) ?>
             </small>
-            <div style="margin-top: 0.8rem;">
+            <div style="margin-top: 0.8rem; display:flex; gap:0.5rem;">
                 <a href="/photos/<?= esc($photo['id']) ?>/edit"
                 style="background:#4f46e5; color:#fff; padding:0.5rem 1.2rem; border-radius:6px; text-decoration:none; font-size:0.9rem;">
-                     Edit Photo
+                    Edit Photo
+                </a>
+                <a href="/photos/<?= esc($photo['id']) ?>/reports/create"
+                style="background:#dc2626; color:#fff; padding:0.5rem 1.2rem; border-radius:6px; text-decoration:none; font-size:0.9rem;">
+                    Report
                 </a>
             </div>
         </div>

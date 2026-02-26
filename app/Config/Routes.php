@@ -43,4 +43,6 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('/albums/create', 'AlbumController::createAlbum');
     $routes->post('/albums/delete', 'AlbumController::deleteAlbum');
     $routes->post('/albums/update', 'AlbumController::updateAlbum');
+    $routes->get('photos/(:num)/reports/create', 'ReportController::create/$1');
+    $routes->post('photos/(:num)/reports',        'ReportController::store/$1');
 });
