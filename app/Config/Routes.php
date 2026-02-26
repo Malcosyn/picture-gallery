@@ -40,6 +40,7 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
 
     $routes->get('/albums', 'AlbumController::showAllAlbum');
     $routes->get('/albums/search', 'AlbumController::searchAlbum');
+    $routes->get('/albums/(:num)', 'AlbumController::showAlbum/$1');
     $routes->post('/albums/create', 'AlbumController::createAlbum');
     $routes->post('/albums/delete', 'AlbumController::deleteAlbum');
     $routes->post('/albums/update', 'AlbumController::updateAlbum');

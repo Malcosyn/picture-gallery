@@ -142,6 +142,8 @@
             gap: 0.6rem;
             box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.12);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            text-decoration: none;
+            color: inherit;
         }
 
         .album-card:hover {
@@ -456,14 +458,14 @@
         <?php if (!empty($albums)): ?>
             <div class="album-grid">
                 <?php foreach ($albums as $album): ?>
-                    <div class="album-card">
+                    <a class="album-card" href="/albums/<?= esc($album['id']) ?>">
                         <div class="album-icon" aria-hidden="true">
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
                             </svg>
                         </div>
                         <div class="album-name"><?= esc($album['title']) ?></div>
-                    </div>
+                    </a>
                 <?php endforeach; ?>
             </div>
         <?php else: ?>

@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\AlbumModel;
+use App\Models\PhotoModel;
 use CodeIgniter\HTTP\ResponseInterface;
 
 class AlbumController extends BaseController
@@ -13,6 +14,23 @@ class AlbumController extends BaseController
         return view('albums/index', [
             'title'  => 'Albums',
             'albums' => (new AlbumModel())->orderBy('id', 'ASC')->findAll(),
+        ]);
+    }
+
+    public function showAlbum($id)
+    {
+        $albumId = (int) $id;
+        $album = (new AlbumModel())->find($albumId);
+
+        if (empty($album)) {
+            return redirect()->to('/profile')->with('error', 'Album not found!');
+        }
+
+        $photos = (new PhotoModel())->getByAlbum($albumId);
+
+        return view('album/index', [
+            'album' => $album,
+            'photos' => $photos,
         ]);
     }
 
