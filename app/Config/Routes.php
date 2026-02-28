@@ -46,4 +46,10 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('/albums/update', 'AlbumController::updateAlbum');
     $routes->get('photos/(:num)/reports/create', 'ReportController::create/$1');
     $routes->post('photos/(:num)/reports',        'ReportController::store/$1');
+
+    $routes->get('/admin', 'AdminController::index');
+    $routes->get('/admin/search', 'AdminController::search');
+    $routes->get('/admin/users/(:num)', 'AdminController::userDetail/$1');
+    $routes->post('/admin/users/(:num)/delete', 'AdminController::deleteUser/$1');
+    $routes->post('/admin/users/(:num)/update', 'AdminController::updateUser/$1');
 });

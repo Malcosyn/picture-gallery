@@ -34,6 +34,27 @@
             color: #1e293b;
         }
 
+        .back-link {
+            align-self: flex-start;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: white;
+            border: 1px solid var(--border);
+            color: var(--primary);
+            padding: 0.55rem 0.9rem;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .back-link:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 8px 20px -12px rgba(0, 0, 0, 0.18);
+        }
+
         /* Container Card */
         .account-card {
             background: white;
@@ -415,6 +436,10 @@
 </head>
 
 <body>
+
+    <button type="button" class="back-link" onclick="history.back()" aria-label="Back to previous page">
+        &#8592; Back
+    </button>
 
     <div class="account-card">
         <h2>Account details</h2>
