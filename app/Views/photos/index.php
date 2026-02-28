@@ -4,7 +4,12 @@
     <meta charset="UTF-8">
     <title><?= esc($title) ?></title>
     <style>
-        body { font-family: sans-serif; padding: 2rem; background: #f9f9f9; }
+        body { font-family: sans-serif; padding: 0; background: #f9f9f9; margin: 0; }
+        .page { padding: 2rem; }
+        .navbar { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background: #ffffff; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 10; }
+        .brand { font-weight: 700; font-size: 1.1rem; color: #111827; text-decoration: none; }
+        .profile-link { display: inline-flex; align-items: center; gap: 0.5rem; color: #374151; text-decoration: none; font-size: 0.95rem; }
+        .profile-icon { width: 32px; height: 32px; border-radius: 50%; background: #e5e7eb; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; color: #6b7280; }
         h1 { margin-bottom: 1rem; }
         .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
         .btn { background: #4f46e5; color: #fff; padding: 0.5rem 1.2rem; border-radius: 6px; text-decoration: none; font-size: 0.95rem; }
@@ -21,10 +26,19 @@
     </style>
 </head>
 <body>
-    <div class="toolbar">
-        <h1><?= esc($title) ?></h1>
-        <a href="/photos/create" class="btn">+ Upload Photo</a>
-    </div>
+    <nav class="navbar">
+        <a href="/" class="brand"><?= esc($title) ?></a>
+        <a href="/profile" class="profile-link" aria-label="Go to profile">
+            <span class="profile-icon">P</span>
+            Profile
+        </a>
+    </nav>
+
+    <div class="page">
+        <div class="toolbar">
+            <h1><?= esc($title) ?></h1>
+            <a href="/photos/create" class="btn">+ Upload Photo</a>
+        </div>
 
     <?php if (session()->getFlashdata('success')): ?>
         <p class="flash"><?= session()->getFlashdata('success') ?></p>
@@ -46,5 +60,6 @@
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
+    </div>
 </body>
 </html>
