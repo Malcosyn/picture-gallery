@@ -79,4 +79,31 @@ class PhotoModel extends Model
             ->get()
             ->getRowArray();
     }
+
+    public function search(array $filters = [])
+    {
+        $builder = $this->db->table('photos p')
+            ->select('p.*, a.title as album_title, c.name as category_name, u.username as photographer')
+            ->join('albums a', 'a.id = p.album_id', 'left')
+            ->join('categories c', 'c.id = p.category_id')
+            ->join('users u', 'u.id = p.photographer_id', 'left');
+
+        if (!empty($filters['title'])) {
+            $builder->like('p.title', $filters['title']);
+        }
+
+        if (!empty($filters['category_id'])) {
+            $builder->where('p.category_id', $filters['category_id']);
+        }
+
+        if (!empty($filters['date_from'])) {
+            $builder->where('p.created_at >=', $filters['date_from'] . ' 00:00:00');
+        }
+
+        if (!empty($filters['date_to'])) {
+            $builder->where('p.created_at <=', $filters['date_to'] . ' 23:59:59');
+        }
+
+        return $builder->orderBy('p.id', 'DESC')->get()->getResultArray();
+    }
 }

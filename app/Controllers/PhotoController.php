@@ -20,9 +20,20 @@ class PhotoController extends BaseController
 
     public function index()
     {
+        $filters = [
+            'title'       => $this->request->getGet('title'),
+            'category_id' => $this->request->getGet('category_id'),
+            'date_from'   => $this->request->getGet('date_from'),
+            'date_to'     => $this->request->getGet('date_to'),
+        ];
+
+        $hasFilters = array_filter($filters);
+
         return view('photos/index', [
-            'title'  => 'Photos',
-            'photos' => $this->photoModel->getWithDetails(),
+            'title'      => 'Photos',
+            'photos'     => $hasFilters ? $this->photoModel->search($filters) : $this->photoModel->getWithDetails(),
+            'categories' => (new CategoryModel())->findAll(),
+            'filters'    => $filters,
         ]);
     }
 
@@ -85,12 +96,16 @@ class PhotoController extends BaseController
         return redirect()->to('/photos')->with('success', 'Photo uploaded successfully.');
     }
 
-    public function edit(int $id)
+public function edit(int $id)
 {
     $photo = $this->photoModel->find($id);
 
     if (!$photo) {
         throw new \CodeIgniter\Exceptions\PageNotFoundException("Photo #$id not found.");
+    }
+
+    if ($photo['photographer_id'] !== session()->get('user_id')) {
+        return redirect()->to("/photos/{$id}")->with('error', 'You can only edit your own photos.');
     }
 
     return view('photos/edit', [
@@ -107,6 +122,10 @@ public function update(int $id)
 
     if (!$photo) {
         throw new \CodeIgniter\Exceptions\PageNotFoundException("Photo #$id not found.");
+    }
+
+    if ($photo['photographer_id'] !== session()->get('user_id')) {
+        return redirect()->to("/photos/{$id}")->with('error', 'You can only edit your own photos.');
     }
 
     if (!$this->validate([
@@ -155,6 +174,10 @@ public function delete(int $id)
 
     if (!$photo) {
         throw new \CodeIgniter\Exceptions\PageNotFoundException("Photo #$id not found.");
+    }
+
+    if ($photo['photographer_id'] !== session()->get('user_id')) {
+        return redirect()->to("/photos/{$id}")->with('error', 'You can only delete your own photos.');
     }
 
    

@@ -23,6 +23,12 @@
         .card-body a { display: inline-block; margin-top: 0.5rem; color: #4f46e5; font-size: 0.875rem; }
         .flash { background: #f0fdf4; color: #16a34a; padding: 0.75rem 1rem; border-radius: 6px; margin-bottom: 1rem; }
         .empty { color: #888; }
+        .search-bar { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-bottom: 1.5rem; align-items: center; }
+        .search-bar input, .search-bar select { padding: 0.5rem 0.8rem; border: 1px solid #ccc; border-radius: 6px; font-size: 0.95rem; }
+        .search-bar input[type="text"] { flex: 1; min-width: 180px; }
+        .search-bar input:focus, .search-bar select:focus { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,0.15); }
+        .btn-clear { background: #6b7280; }
+        .btn-clear:hover { background: #4b5563; }
     </style>
 </head>
 <body>
@@ -40,9 +46,48 @@
             <a href="/photos/create" class="btn">+ Upload Photo</a>
         </div>
 
-    <?php if (session()->getFlashdata('success')): ?>
-        <p class="flash"><?= session()->getFlashdata('success') ?></p>
-    <?php endif; ?>
+        <?php if (session()->getFlashdata('success')): ?>
+            <p class="flash"><?= session()->getFlashdata('success') ?></p>
+        <?php endif; ?>
+
+        <!-- Search & Filter -->
+        <form method="get" action="/photos" class="search-bar">
+            <input
+                type="text"
+                name="title"
+                placeholder="Search by title..."
+                value="<?= esc($filters['title'] ?? '') ?>"
+            >
+
+            <select name="category_id">
+                <option value="">All Categories</option>
+                <?php foreach ($categories as $cat): ?>
+                    <option value="<?= esc($cat['id']) ?>" <?= ($filters['category_id'] ?? '') == $cat['id'] ? 'selected' : '' ?>>
+                        <?= esc($cat['name']) ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+
+            <input
+                type="date"
+                name="date_from"
+                value="<?= esc($filters['date_from'] ?? '') ?>"
+                title="From date"
+            >
+
+            <input
+                type="date"
+                name="date_to"
+                value="<?= esc($filters['date_to'] ?? '') ?>"
+                title="To date"
+            >
+
+            <button type="submit" class="btn">Search</button>
+
+            <?php if (array_filter($filters)): ?>
+                <a href="/photos" class="btn btn-clear">✕ Clear</a>
+            <?php endif; ?>
+        </form>
 
     <?php if (empty($photos)): ?>
         <p class="empty">No photos yet.</p>
