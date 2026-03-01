@@ -167,6 +167,33 @@
             color: inherit;
         }
 
+        .album-open-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.6rem;
+            text-decoration: none;
+            color: inherit;
+            width: 100%;
+        }
+
+        .album-edit-btn {
+            border: 1px solid var(--border);
+            background: #f8fafc;
+            color: var(--primary);
+            padding: 0.4rem 0.7rem;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        .album-edit-btn:hover {
+            background: #eef2ff;
+            border-color: #c7d2fe;
+        }
+
         .album-card:hover {
             transform: translateY(-2px);
             box-shadow: 0 14px 28px -12px rgba(0, 0, 0, 0.18);
@@ -541,14 +568,26 @@
         <?php if (!empty($albums)): ?>
             <div class="album-grid">
                 <?php foreach ($albums as $album): ?>
-                    <a class="album-card" href="/albums/<?= esc($album['id']) ?>">
-                        <div class="album-icon" aria-hidden="true">
-                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
-                            </svg>
-                        </div>
-                        <div class="album-name"><?= esc($album['title']) ?></div>
-                    </a>
+                    <div class="album-card">
+                        <a class="album-open-link" href="/albums/<?= esc($album['id']) ?>">
+                            <div class="album-icon" aria-hidden="true">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/>
+                                </svg>
+                            </div>
+                            <div class="album-name"><?= esc($album['title']) ?></div>
+                        </a>
+                        <button
+                            type="button"
+                            class="album-edit-btn openEditAlbumModalBtn"
+                            data-album-id="<?= esc($album['id']) ?>"
+                            data-title="<?= esc($album['title']) ?>"
+                            data-description="<?= esc($album['description'] ?? '') ?>"
+                            data-is-public="<?= !empty($album['is_public']) ? '1' : '0' ?>"
+                        >
+                            Edit Album
+                        </button>
+                    </div>
                 <?php endforeach; ?>
             </div>
         <?php else: ?>
@@ -603,6 +642,43 @@
                 <div class="modal-actions">
                     <button type="button" class="btn btn-secondary" id="cancelAddAlbumBtn">Cancel</button>
                     <button type="submit" class="btn btn-primary">Create</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="modal" id="editAlbumModal">
+        <div class="modal-content">
+            <span class="close-icon" id="closeEditAlbumModalX">&times;</span>
+            <h3>Edit Album</h3>
+
+            <form action="/albums/update" method="post">
+                <?= csrf_field() ?>
+                <input type="hidden" name="album_id" id="editAlbumId">
+
+                <div class="form-group">
+                    <label>Album Name</label>
+                    <input type="text" name="title" id="editAlbumTitle" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Description</label>
+                    <input type="text" name="description" id="editAlbumDescription">
+                </div>
+
+                <div class="form-group">
+                    <div class="switch-row">
+                        <label for="edit-album-public">Public</label>
+                        <label class="switch">
+                            <input id="edit-album-public" type="checkbox" name="is_public" value="1">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelEditAlbumBtn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
         </div>
@@ -673,15 +749,37 @@
         const openAddAlbumBtn = document.getElementById('openAddAlbumModalBtn');
         const closeAddAlbumX = document.getElementById('closeAddAlbumModalX');
         const cancelAddAlbumBtn = document.getElementById('cancelAddAlbumBtn');
+        const editAlbumModal = document.getElementById('editAlbumModal');
+        const closeEditAlbumX = document.getElementById('closeEditAlbumModalX');
+        const cancelEditAlbumBtn = document.getElementById('cancelEditAlbumBtn');
+        const openEditAlbumBtns = document.querySelectorAll('.openEditAlbumModalBtn');
+        const editAlbumId = document.getElementById('editAlbumId');
+        const editAlbumTitle = document.getElementById('editAlbumTitle');
+        const editAlbumDescription = document.getElementById('editAlbumDescription');
+        const editAlbumIsPublic = document.getElementById('edit-album-public');
 
         openBtn.onclick = () => modal.classList.add('show');
         closeX.onclick = cancelBtn.onclick = () => modal.classList.remove('show');
         if (openAddAlbumBtn) openAddAlbumBtn.onclick = () => addAlbumModal.classList.add('show');
         if (closeAddAlbumX) closeAddAlbumX.onclick = () => addAlbumModal.classList.remove('show');
         if (cancelAddAlbumBtn) cancelAddAlbumBtn.onclick = () => addAlbumModal.classList.remove('show');
+        if (closeEditAlbumX) closeEditAlbumX.onclick = () => editAlbumModal.classList.remove('show');
+        if (cancelEditAlbumBtn) cancelEditAlbumBtn.onclick = () => editAlbumModal.classList.remove('show');
+
+        openEditAlbumBtns.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                editAlbumId.value = btn.dataset.albumId || '';
+                editAlbumTitle.value = btn.dataset.title || '';
+                editAlbumDescription.value = btn.dataset.description || '';
+                editAlbumIsPublic.checked = btn.dataset.isPublic === '1';
+                editAlbumModal.classList.add('show');
+            });
+        });
+
         window.onclick = (e) => {
             if (e.target === modal) modal.classList.remove('show');
             if (e.target === addAlbumModal) addAlbumModal.classList.remove('show');
+            if (e.target === editAlbumModal) editAlbumModal.classList.remove('show');
             if (e.target === document.getElementById('deleteModal')) closeDeleteModal();
         }
 
