@@ -51,7 +51,6 @@
                 <?= esc($photo['created_at']) ?>
             </small>
             <div style="margin-top: 0.8rem; display:flex; gap:0.5rem; flex-wrap:wrap;">
-
                 <?php if (session()->get('user_id') === $photo['photographer_id']): ?>
                     <a href="/photos/<?= esc($photo['id']) ?>/edit"
                     style="background:#4f46e5; color:#fff; padding:0.5rem 1.2rem; border-radius:6px; text-decoration:none; font-size:0.9rem;">
@@ -64,23 +63,10 @@
                     </a>
                 <?php endif; ?>
 
-                <!-- Any logged in user can add to their own album -->
                 <a href="/photos/<?= esc($photo['id']) ?>/album"
                 style="background:#059669; color:#fff; padding:0.5rem 1.2rem; border-radius:6px; text-decoration:none; font-size:0.9rem;">
-                     Add to Album
+                    Add to Album
                 </a>
-
-                <?php if (session()->get('user_id') === $photo['photographer_id'] && !empty($photo['album_title'])): ?>
-                    <form action="/photos/<?= esc($photo['id']) ?>/album/remove" method="post" style="display:inline;">
-                        <?= csrf_field() ?>
-                        <button type="submit"
-                                onclick="return confirm('Remove from album?')"
-                                style="background:#6b7280; color:#fff; border:none; padding:0.5rem 1.2rem; border-radius:6px; font-size:0.9rem; cursor:pointer;">
-                             Remove from Album
-                        </button>
-                    </form>
-                <?php endif; ?>
-
             </div>
         </div>
     </div>
