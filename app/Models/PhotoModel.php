@@ -12,7 +12,7 @@ class PhotoModel extends Model
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['album_id', 'photographer_id', 'category_id', 'image_path', 'title', 'alt_text', 'file_size', 'created_at'];
+    protected $allowedFields = ['photographer_id', 'category_id', 'image_path', 'title', 'alt_text', 'file_size', 'is_public', 'created_at'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -44,25 +44,12 @@ class PhotoModel extends Model
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    public function getWithDetails()
+        public function getWithDetails()
     {
         return $this->db->table('photos p')
-            ->select('p.*, a.title as album_title, c.name as category_name, u.username as photographer')
-            ->join('albums a', 'a.id = p.album_id', 'left')
+            ->select('p.*, c.name as category_name, u.username as photographer')
             ->join('categories c', 'c.id = p.category_id')
             ->join('users u', 'u.id = p.photographer_id', 'left')
-            ->orderBy('p.id', 'DESC')
-            ->get()
-            ->getResultArray();
-    }
-
-    public function getByAlbum(int $albumId)
-    {
-        return $this->db->table('photos p')
-            ->select('p.*, a.title as album_title, c.name as category_name')
-            ->join('albums a', 'a.id = p.album_id', 'left')
-            ->join('categories c', 'c.id = p.category_id')
-            ->where('p.album_id', $albumId)
             ->orderBy('p.id', 'DESC')
             ->get()
             ->getResultArray();
@@ -71,13 +58,25 @@ class PhotoModel extends Model
     public function getOneWithDetails(int $id)
     {
         return $this->db->table('photos p')
-            ->select('p.*, a.title as album_title, c.name as category_name, u.username as photographer')
-            ->join('albums a', 'a.id = p.album_id', 'left')
+            ->select('p.*, c.name as category_name, u.username as photographer')
             ->join('categories c', 'c.id = p.category_id')
             ->join('users u', 'u.id = p.photographer_id', 'left')
             ->where('p.id', $id)
             ->get()
             ->getRowArray();
+    }
+
+    public function getByAlbum(int $albumId)
+    {
+        return $this->db->table('photos p')
+            ->select('p.*, c.name as category_name, u.username as photographer')
+            ->join('album_saves s', 's.photo_id = p.id')
+            ->join('categories c', 'c.id = p.category_id')
+            ->join('users u', 'u.id = p.photographer_id', 'left')
+            ->where('s.album_id', $albumId)
+            ->orderBy('p.id', 'DESC')
+            ->get()
+            ->getResultArray();
     }
 
     public function search(array $filters = [])

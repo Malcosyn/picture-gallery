@@ -8,14 +8,15 @@
         .card { background: #fff; padding: 2rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); max-width: 520px; }
         h1 { margin-top: 0; }
         .photo-preview { width: 100%; max-height: 200px; object-fit: cover; border-radius: 6px; margin-bottom: 1.2rem; }
-        label { display: block; font-weight: bold; color: #444; margin-bottom: 0.3rem; }
-        select { width: 100%; padding: 0.6rem 0.8rem; border: 1px solid #ccc; border-radius: 6px; font-size: 1rem; box-sizing: border-box; margin-bottom: 0.3rem; }
-        select:focus { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,0.15); }
-        .form-group { margin-bottom: 1.2rem; }
-        .btn { background: #4f46e5; color: #fff; border: none; padding: 0.7rem 1.5rem; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+        .album-list { list-style: none; padding: 0; margin: 0 0 1.2rem; }
+        .album-list li { display: flex; justify-content: space-between; align-items: center; padding: 0.7rem 1rem; border: 1px solid #eee; border-radius: 6px; margin-bottom: 0.5rem; }
+        .album-list li.saved { background: #f0fdf4; border-color: #86efac; }
+        .badge { font-size: 0.75rem; background: #16a34a; color: #fff; padding: 0.2rem 0.5rem; border-radius: 4px; }
+        .btn { background: #4f46e5; color: #fff; border: none; padding: 0.4rem 1rem; border-radius: 6px; font-size: 0.9rem; cursor: pointer; text-decoration: none; }
         .btn:hover { background: #4338ca; }
-        a { color: #4f46e5; text-decoration: none; display: inline-block; margin-top: 1rem; }
-        a:hover { text-decoration: underline; }
+        .btn-remove { background: #6b7280; }
+        .btn-remove:hover { background: #4b5563; }
+        a.back { color: #4f46e5; text-decoration: none; display: inline-block; margin-top: 1rem; }
         .empty { color: #888; }
     </style>
 </head>
@@ -23,30 +24,37 @@
     <div class="card">
         <h1><?= esc($title) ?></h1>
 
-        <img src="/<?= esc($photo['image_path']) ?>" class="photo-preview" alt="<?= esc($photo['title'] ?? '') ?>">
+        <img src="/<?= esc($photo['image_path']) ?>" class="photo-preview" alt="">
 
         <?php if (empty($albums)): ?>
             <p class="empty">You have no albums yet. <a href="/profile">Create one first.</a></p>
         <?php else: ?>
-            <form action="/photos/<?= esc($photo['id']) ?>/album" method="post">
-                <?= csrf_field() ?>
-
-                <div class="form-group">
-                    <label for="album_id">Select Album</label>
-                    <select id="album_id" name="album_id">
-                        <?php foreach ($albums as $album): ?>
-                            <option value="<?= esc($album['id']) ?>" <?= $photo['album_id'] == $album['id'] ? 'selected' : '' ?>>
-                                <?= esc($album['title']) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn">Save to Album</button>
-            </form>
+            <ul class="album-list">
+                <?php foreach ($albums as $album): ?>
+                <li class="<?= $album['is_saved'] ? 'saved' : '' ?>">
+                    <span><?= esc($album['title']) ?></span>
+                    <div style="display:flex; gap:0.5rem; align-items:center;">
+                        <?php if ($album['is_saved']): ?>
+                            <span class="badge">✓ Added</span>
+                            <form action="/photos/<?= esc($photo['id']) ?>/album/remove" method="post">
+                                <?= csrf_field() ?>
+                                <input type="hidden" name="album_id" value="<?= esc($album['id']) ?>">
+                                <button type="submit" class="btn btn-remove">Remove</button>
+                            </form>
+                        <?php else: ?>
+                            <form action="/photos/<?= esc($photo['id']) ?>/album" method="post">
+                                <?= csrf_field() ?>
+                                <input type="hidden" name="album_id" value="<?= esc($album['id']) ?>">
+                                <button type="submit" class="btn">+ Add</button>
+                            </form>
+                        <?php endif; ?>
+                    </div>
+                </li>
+                <?php endforeach; ?>
+            </ul>
         <?php endif; ?>
 
-        <a href="/photos/<?= esc($photo['id']) ?>">&larr; Back to photo</a>
+        <a class="back" href="/photos/<?= esc($photo['id']) ?>">&larr; Back to photo</a>
     </div>
 </body>
 </html>

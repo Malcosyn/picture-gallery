@@ -98,7 +98,7 @@
                 <img src="/<?= esc($photo['image_path']) ?>" alt="<?= esc($photo['alt_text'] ?? $photo['title']) ?>">
                 <div class="card-body">
                     <h3><?= esc($photo['title'] ?? 'Untitled') ?></h3>
-                    <small><?= esc($photo['category_name']) ?> &bull; <?= esc($photo['album_title']) ?></small><br>
+                    <small><?= esc($photo['category_name']) ?></small><br>
                     <a href="/photos/<?= esc($photo['id']) ?>">View &rarr;</a>
                 </div>
             </div>
