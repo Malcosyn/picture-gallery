@@ -5,11 +5,11 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/register', 'RegisterController::index');
-$routes->post('/register/addNewUser', 'RegisterController::register');
+$routes->get('/register', 'RegisterController::index', ['filter' => 'guest']);
+$routes->post('/register/addNewUser', 'RegisterController::register', ['filter' => 'guest']);
 
-$routes->get('/login', 'LoginController::index');
-$routes->post('/login/verify', 'LoginController::login');
+$routes->get('/login', 'LoginController::index', ['filter' => 'guest']);
+$routes->post('/login/verify', 'LoginController::login', ['filter' => 'guest']);
 
 $routes->get('/logout', 'ProfileController::logout');
 
@@ -50,9 +50,9 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('photos/(:num)/reports/create', 'ReportController::create/$1');
     $routes->post('photos/(:num)/reports',        'ReportController::store/$1');
 
-    $routes->get('/admin', 'AdminController::index');
-    $routes->get('/admin/search', 'AdminController::search');
-    $routes->get('/admin/users/(:num)', 'AdminController::userDetail/$1');
-    $routes->post('/admin/users/(:num)/delete', 'AdminController::deleteUser/$1');
-    $routes->post('/admin/users/(:num)/update', 'AdminController::updateUser/$1');
+    $routes->get('/admin', 'AdminController::index', ['filter' => 'admin']);
+    $routes->get('/admin/search', 'AdminController::search', ['filter' => 'admin']);
+    $routes->get('/admin/users/(:num)', 'AdminController::userDetail/$1', ['filter' => 'admin']);
+    $routes->post('/admin/users/(:num)/delete', 'AdminController::deleteUser/$1', ['filter' => 'admin']);
+    $routes->post('/admin/users/(:num)/update', 'AdminController::updateUser/$1', ['filter' => 'admin']);
 });

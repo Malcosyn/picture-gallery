@@ -4,7 +4,11 @@
     <meta charset="UTF-8">
     <title><?= esc($title) ?></title>
     <style>
-        body { font-family: sans-serif; padding: 2rem; background: #f9f9f9; max-width: 760px; margin: 0 auto; }
+        body { font-family: sans-serif; background: #f9f9f9; margin: 0; }
+        .navbar { display: flex; align-items: center; padding: 1rem 1.25rem; background: #ffffff; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 10; }
+        .back-link { color: #374151; text-decoration: none; font-weight: 600; }
+        .back-link:hover { text-decoration: underline; }
+        .page { max-width: 760px; margin: 0 auto; padding: 2rem; }
         .photo-card { background: #fff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; margin-bottom: 2rem; }
         .photo-card img { width: 100%; max-height: 460px; object-fit: cover; display: block; }
         .photo-info { padding: 1rem 1.5rem; }
@@ -32,6 +36,11 @@
     </style>
 </head>
 <body>
+    <nav class="navbar">
+        <a href="/photos" class="back-link">&larr; Back to Photos</a>
+    </nav>
+
+    <div class="page">
 
     <?php if (session()->getFlashdata('success')): ?>
         <p class="flash"><?= session()->getFlashdata('success') ?></p>
@@ -126,7 +135,6 @@
         </form>
     </div>
 
-    <br>
-    <a href="/photos">&larr; Back to photos</a>
+    </div>
 </body>
 </html>

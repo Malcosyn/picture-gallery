@@ -2,6 +2,7 @@
 
 namespace App\Filters;
 
+use App\Models\UserModel;
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -27,6 +28,11 @@ class AuthFilter implements FilterInterface
     {
         if (!session()->get('user_id')) {
             return redirect()->to('/login')->with('error', 'You must be logged in to access this page.');
+        }
+
+        if (!session()->has('user_role')) {
+            $user = (new UserModel())->find((int) session()->get('user_id'));
+            session()->set('user_role', $user['role'] ?? 'user');
         }
     }
 

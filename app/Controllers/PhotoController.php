@@ -20,6 +20,10 @@ class PhotoController extends BaseController
 
     public function index()
     {
+        if (session()->get('user_role') === 'admin') {
+            return redirect()->to('/admin');
+        }
+
         $filters = [
             'title'       => $this->request->getGet('title'),
             'category_id' => $this->request->getGet('category_id'),
@@ -83,7 +87,6 @@ class PhotoController extends BaseController
         $file->move(FCPATH . 'uploads/photos', $newName);
 
         $this->photoModel->insert([
-            'album_id'    => 3,
             'photographer_id' => (int) session()->get('user_id'),
             'category_id' => $this->request->getPost('category_id'),
             'title'       => $this->request->getPost('title'),

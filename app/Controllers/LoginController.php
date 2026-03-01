@@ -21,7 +21,17 @@ class LoginController extends BaseController
         $user = $model->where('email', $email)->first();
         
         if ($user && password_verify($password, $user['password'])) {
-            session()->set('user_id', $user['id']);
+            $role = $user['role'] ?? 'user';
+
+            session()->set([
+                'user_id'   => $user['id'],
+                'user_role' => $role,
+            ]);
+
+            if ($role === 'admin') {
+                return redirect()->to('/admin')->with('success', 'Login successful!');
+            }
+
             return redirect()->to('/photos')->with('success', 'Login successful!');
         } else {
             return redirect()->to('/login')->with('error', 'Invalid email or password.');

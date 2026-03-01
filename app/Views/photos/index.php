@@ -8,8 +8,19 @@
         .page { padding: 2rem; }
         .navbar { display: flex; align-items: center; justify-content: space-between; padding: 1rem 2rem; background: #ffffff; border-bottom: 1px solid #e5e7eb; position: sticky; top: 0; z-index: 10; }
         .brand { font-weight: 700; font-size: 1.1rem; color: #111827; text-decoration: none; }
-        .profile-link { display: inline-flex; align-items: center; gap: 0.5rem; color: #374151; text-decoration: none; font-size: 0.95rem; }
-        .profile-icon { width: 32px; height: 32px; border-radius: 50%; background: #e5e7eb; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; color: #6b7280; }
+        .profile-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.45rem 0.8rem;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+            color: #1e293b;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .profile-link:hover { background: #eef2ff; border-color: #c7d2fe; }
         h1 { margin-bottom: 1rem; }
         .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; }
         .btn { background: #4f46e5; color: #fff; padding: 0.5rem 1.2rem; border-radius: 6px; text-decoration: none; font-size: 0.95rem; }
@@ -34,10 +45,7 @@
 <body>
     <nav class="navbar">
         <a href="/" class="brand"><?= esc($title) ?></a>
-        <a href="/profile" class="profile-link" aria-label="Go to profile">
-            <span class="profile-icon">P</span>
-            Profile
-        </a>
+        <a href="/profile" class="profile-link" aria-label="Go to profile">Go to Profile</a>
     </nav>
 
     <div class="page">
