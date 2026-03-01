@@ -33,6 +33,9 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('photos/(:num)/update', 'PhotoController::update/$1');
     $routes->post('photos/(:num)/delete', 'PhotoController::delete/$1');
 
+    $routes->get('photos/(:num)/album',         'AlbumController::addToAlbum/$1');
+    $routes->post('photos/(:num)/album',        'AlbumController::saveToAlbum/$1');
+    $routes->post('photos/(:num)/album/remove', 'AlbumController::removeFromAlbum/$1');
 
     $routes->post('photos/(:num)/comments',        'CommentController::store/$1');
     $routes->get('photos/(:num)/comments/(:num)/delete', 'CommentController::delete/$2');

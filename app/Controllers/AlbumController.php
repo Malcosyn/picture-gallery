@@ -88,4 +88,59 @@ class AlbumController extends BaseController
 
         return redirect()->to('/profile')->with('success', 'Album created!');
     }
+
+    public function addToAlbum(int $photoId)
+    {
+        $photoModel = new PhotoModel();
+        $photo = $photoModel->find($photoId);
+
+        if (!$photo) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Photo #$photoId not found.");
+        }
+
+        // Show only the logged in user's albums
+        $albums = (new AlbumModel())
+            ->where('photographer_id', session()->get('user_id'))
+            ->findAll();
+
+        return view('album/add_to_album', [
+            'title'  => 'Add to Album',
+            'photo'  => $photo,
+            'albums' => $albums,
+        ]);
+    }
+
+    public function saveToAlbum(int $photoId)
+    {
+        $photoModel = new PhotoModel();
+        $photo = $photoModel->find($photoId);
+
+        if (!$photo) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Photo #$photoId not found.");
+        }
+
+        $albumId = $this->request->getPost('album_id');
+
+        $photoModel->update($photoId, ['album_id' => $albumId]);
+
+        return redirect()->to("/photos/{$photoId}")->with('success', 'Photo added to album!');
+    }
+
+    public function removeFromAlbum(int $photoId)
+    {
+        $photoModel = new PhotoModel();
+        $photo = $photoModel->find($photoId);
+
+        if (!$photo) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Photo #$photoId not found.");
+        }
+
+        if ($photo['photographer_id'] !== session()->get('user_id')) {
+            return redirect()->to("/photos/{$photoId}")->with('error', 'You can only manage your own photos.');
+        }
+
+        $photoModel->update($photoId, ['album_id' => null]);
+
+        return redirect()->to("/photos/{$photoId}")->with('success', 'Photo removed from album.');
+    }
 }
