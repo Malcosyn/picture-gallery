@@ -106,4 +106,6 @@ class PhotoModel extends Model
 
         return $builder->orderBy('p.id', 'DESC')->get()->getResultArray();
     }
+
+    
 }
