@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Controllers\BaseController;
 use App\Models\AlbumModel;
+use App\Models\PhotoModel;
 use App\Models\UserModel;
 
 class ProfileController extends BaseController
@@ -17,6 +18,10 @@ class ProfileController extends BaseController
         $user['albums'] = (new AlbumModel())
             ->where('photographer_id', $userId)
             ->orderBy('id', 'ASC')
+            ->findAll();
+        $user['photos'] = (new PhotoModel())
+            ->where('photographer_id', $userId)
+            ->orderBy('id', 'DESC')
             ->findAll();
 
         return view('profile/detail_profile', $user);

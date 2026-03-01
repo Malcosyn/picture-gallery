@@ -16,6 +16,12 @@
         .error { color: #dc2626; font-size: 0.875rem; }
         .btn-danger { background: #dc2626; color: #fff; border: none; padding: 0.7rem 1.5rem; border-radius: 6px; font-size: 1rem; cursor: pointer; }
         .btn-danger:hover { background: #b91c1c; }
+        .quick-links { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+        .quick-links a { margin-top: 0; padding: 0.5rem 0.9rem; border-radius: 6px; text-decoration: none; font-size: 0.92rem; }
+        .btn-link { background: #eef2ff; color: #3730a3; }
+        .btn-link:hover { background: #e0e7ff; text-decoration: none; }
+        .btn-success { background: #ecfdf5; color: #065f46; }
+        .btn-success:hover { background: #d1fae5; text-decoration: none; }
         a { color: #4f46e5; text-decoration: none; display: inline-block; margin-top: 1rem; }
         a:hover { text-decoration: underline; }
     </style>
@@ -49,7 +55,13 @@
             <button type="submit" class="btn-danger">Submit Report</button>
         </form>
 
-        <a href="/photos/<?= esc($photo['id']) ?>">&larr; Back to photo</a>
+        <div class="quick-links">
+            <a href="/photos/<?= esc($photo['id']) ?>" class="btn-link">&larr; Photo Detail</a>
+            <a href="/photos/<?= esc($photo['id']) ?>/album" class="btn-success">Add to Album</a>
+            <?php if ((int) session()->get('user_id') === (int) ($photo['photographer_id'] ?? 0)): ?>
+                <a href="/photos/<?= esc($photo['id']) ?>/edit" class="btn-link">Edit Photo</a>
+            <?php endif; ?>
+        </div>
     </div>
 </body>
 </html>

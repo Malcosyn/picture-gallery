@@ -6,24 +6,61 @@
     <title>Admin Panel</title>
     <style>
         :root {
-            --bg: #0f172a;
-            --card: #0b1220;
-            --panel: #111827;
-            --text: #e5e7eb;
-            --muted: #94a3b8;
-            --accent: #22c55e;
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --panel: #ffffff;
+            --text: #0f172a;
+            --muted: #64748b;
+            --accent: #2563eb;
             --danger: #ef4444;
-            --border: #1f2937;
+            --border: #e2e8f0;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            background: radial-gradient(circle at top left, #0b1220 0%, #020617 60%);
+            background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
             color: var(--text);
             min-height: 100vh;
-            padding: 2rem;
+            margin: 0;
+        }
+
+        .topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        .topbar-title {
+            font-weight: 700;
+            font-size: 1.05rem;
+            color: #111827;
+        }
+
+        .topbar-link {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.45rem 0.8rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: #f8fafc;
+            color: #1e293b;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .topbar-link:hover {
+            background: #eef2ff;
+            border-color: #c7d2fe;
         }
 
         .page {
@@ -33,6 +70,7 @@
             grid-template-columns: 220px 1fr;
             gap: 2rem;
             align-items: start;
+            padding: 2rem;
         }
 
         .sidebar {
@@ -66,7 +104,7 @@
             color: var(--text);
             text-decoration: none;
             border: 1px solid transparent;
-            background: #0b1220;
+            background: #ffffff;
             font-size: 0.9rem;
             font-weight: 600;
             transition: all 0.2s ease;
@@ -94,7 +132,7 @@
         }
 
         .search-input {
-            background: #0b1220;
+            background: #ffffff;
             border: 1px solid var(--border);
             color: var(--text);
             padding: 0.6rem 0.75rem;
@@ -114,7 +152,7 @@
         }
 
         .hero {
-            background: linear-gradient(135deg, #111827, #0b1220);
+            background: linear-gradient(135deg, #ffffff, #f8fafc);
             padding: 1.8rem 2rem;
             border-radius: 18px;
             border: 1px solid var(--border);
@@ -142,7 +180,7 @@
         }
 
         .badge {
-            background: #0b1220;
+            background: #ffffff;
             border: 1px solid var(--border);
             padding: 0.5rem 0.9rem;
             border-radius: 999px;
@@ -208,14 +246,14 @@
         }
 
         .pill-danger {
-            background: rgba(239, 68, 68, 0.12);
-            color: #fecaca;
+            background: rgba(239, 68, 68, 0.1);
+            color: #b91c1c;
             border-color: rgba(239, 68, 68, 0.3);
         }
 
         .pill-muted {
             background: rgba(148, 163, 184, 0.12);
-            color: #cbd5f5;
+            color: #334155;
             border-color: rgba(148, 163, 184, 0.3);
         }
 
@@ -236,7 +274,7 @@
             text-decoration: none;
             font-size: 0.8rem;
             font-weight: 600;
-            background: #0b1220;
+            background: #ffffff;
         }
 
         .action-link:hover { border-color: var(--accent); }
@@ -245,8 +283,8 @@
             padding: 0.35rem 0.6rem;
             border-radius: 8px;
             border: 1px solid rgba(239, 68, 68, 0.5);
-            background: transparent;
-            color: #fecaca;
+            background: #fff5f5;
+            color: #b91c1c;
             font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
@@ -269,7 +307,7 @@
         }
 
         @media (max-width: 900px) {
-            body { padding: 1.25rem; }
+            .topbar { padding: 0.85rem 1rem; }
             .page { grid-template-columns: 1fr; }
             .sidebar { position: static; }
             .hero { flex-direction: column; align-items: flex-start; }
@@ -278,6 +316,11 @@
     </style>
 </head>
 <body>
+    <nav class="topbar">
+        <div class="topbar-title">Admin Panel</div>
+        <a href="/profile" class="topbar-link">Go to Profile</a>
+    </nav>
+
     <div class="page">
         <aside class="sidebar">
             <div class="nav-title">Navigation</div>

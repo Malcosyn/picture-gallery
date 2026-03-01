@@ -198,6 +198,63 @@
             border: 1px solid #f1f5f9;
         }
 
+        .photo-section {
+            max-width: 960px;
+            width: 100%;
+        }
+
+        .photo-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin: 1.3rem 0 0.85rem;
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
+        }
+
+        .photo-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            overflow: hidden;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.12);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px -12px rgba(0, 0, 0, 0.18);
+        }
+
+        .photo-card img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .photo-meta {
+            padding: 0.75rem 0.85rem 0.9rem;
+        }
+
+        .photo-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.2rem;
+        }
+
+        .photo-date {
+            font-size: 0.78rem;
+            color: var(--secondary);
+        }
+
         /* Buttons */
         .btn-group {
             display: flex;
@@ -437,9 +494,10 @@
 
 <body>
 
-    <button type="button" class="back-link" onclick="history.back()" aria-label="Back to previous page">
+    <?php $backUrl = session()->get('user_role') === 'admin' ? '/admin' : '/photos'; ?>
+    <a href="<?= esc($backUrl) ?>" class="back-link" aria-label="Back to dashboard">
         &#8592; Back
-    </button>
+    </a>
 
     <div class="account-card">
         <h2>Account details</h2>
@@ -495,6 +553,25 @@
             </div>
         <?php else: ?>
             <div class="album-empty">No albums found.</div>
+        <?php endif; ?>
+    </div>
+
+    <div class="photo-section">
+        <div class="photo-title">Uploaded Photos</div>
+        <?php if (!empty($photos)): ?>
+            <div class="photo-grid">
+                <?php foreach ($photos as $photo): ?>
+                    <a class="photo-card" href="/photos/<?= esc($photo['id']) ?>">
+                        <img src="/<?= esc($photo['image_path']) ?>" alt="<?= esc($photo['alt_text'] ?? $photo['title'] ?? 'Photo') ?>">
+                        <div class="photo-meta">
+                            <div class="photo-name"><?= esc($photo['title'] ?? 'Untitled') ?></div>
+                            <div class="photo-date"><?= esc($photo['created_at'] ?? '-') ?></div>
+                        </div>
+                    </a>
+                <?php endforeach; ?>
+            </div>
+        <?php else: ?>
+            <div class="album-empty">No uploaded photos yet.</div>
         <?php endif; ?>
     </div>
 
