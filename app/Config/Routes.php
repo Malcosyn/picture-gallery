@@ -13,6 +13,13 @@ $routes->post('/login/verify', 'LoginController::login', ['filter' => 'guest']);
 
 $routes->get('/logout', 'ProfileController::logout');
 
+$routes->group('api', static function ($routes) {
+    $routes->get('comments', 'Api\Comments::index');
+    $routes->get('comments/(:num)', 'Api\Comments::show/$1');
+    $routes->post('comments', 'Api\Comments::create');
+    $routes->delete('comments/(:num)', 'Api\Comments::delete/$1');
+});
+
 $routes->group('', ['filter' => 'auth'], function ($routes) {
 
     $routes->get('/profile', 'ProfileController::index');
