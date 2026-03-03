@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\PhotoModel;
 use App\Models\ReportModel;
 use App\Models\UserModel;
 
@@ -139,5 +140,24 @@ class AdminController extends BaseController
         $userModel->update($id, $data);
 
         return redirect()->back()->with('success', 'User updated.');
+    }
+
+    public function deletePhoto(int $id)
+    {
+        $photoModel = new PhotoModel();
+        $photo = $photoModel->find($id);
+
+        if (!$photo) {
+            return redirect()->back()->with('error', 'Photo not found.');
+        }
+
+        $path = FCPATH . ($photo['image_path'] ?? '');
+        if (!empty($photo['image_path']) && is_file($path)) {
+            @unlink($path);
+        }
+
+        $photoModel->delete($id);
+
+        return redirect()->back()->with('success', 'Photo deleted.');
     }
 }

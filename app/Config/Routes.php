@@ -43,7 +43,6 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('photos/(:num)/album',         'AlbumController::addToAlbum/$1');
     $routes->post('photos/(:num)/album',        'AlbumController::saveToAlbum/$1');
     $routes->post('photos/(:num)/album/remove', 'AlbumController::removeFromAlbum/$1');
-
     $routes->post('photos/(:num)/comments',        'CommentController::store/$1');
     $routes->get('photos/(:num)/comments/(:num)/delete', 'CommentController::delete/$2');
     $routes->get('/dashboard', 'DashboardController::index');
@@ -62,4 +61,5 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->get('/admin/users/(:num)', 'AdminController::userDetail/$1', ['filter' => 'admin']);
     $routes->post('/admin/users/(:num)/delete', 'AdminController::deleteUser/$1', ['filter' => 'admin']);
     $routes->post('/admin/users/(:num)/update', 'AdminController::updateUser/$1', ['filter' => 'admin']);
+    $routes->post('/admin/photos/(:num)/delete', 'AdminController::deletePhoto/$1', ['filter' => 'admin']);
 });

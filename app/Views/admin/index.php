@@ -354,7 +354,7 @@
                         <th>Title</th>
                         <th>Reason</th>
                         <th>Reported At</th>
-                        <th>Link</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody id="reports-body">
@@ -372,7 +372,13 @@
                             <td><?= esc($report['created_at'] ?? '-') ?></td>
                             <td>
                                 <?php if (!empty($report['photo_id'])): ?>
-                                    <a href="/photos/<?= esc($report['photo_id']) ?>">View</a>
+                                    <div class="action-group">
+                                        <a class="action-link" href="/photos/<?= esc($report['photo_id']) ?>">View</a>
+                                        <form action="/admin/photos/<?= esc($report['photo_id']) ?>/delete" method="post" onsubmit="return confirm('Delete this photo? This action cannot be undone.')">
+                                            <?= csrf_field() ?>
+                                            <button class="action-btn" type="submit">Delete Photo</button>
+                                        </form>
+                                    </div>
                                 <?php else: ?>
                                     <span class="pill pill-muted">N/A</span>
                                 <?php endif; ?>
@@ -467,8 +473,16 @@
                 const title = report.title || 'Untitled';
                 const reason = report.reason || '-';
                 const created = report.created_at || '-';
-                const link = report.photo_id
-                    ? `<a href="/photos/${report.photo_id}">View</a>`
+                const actions = report.photo_id
+                    ? `
+                        <div class="action-group">
+                            <a class="action-link" href="/photos/${report.photo_id}">View</a>
+                            <form action="/admin/photos/${report.photo_id}/delete" method="post" onsubmit="return confirm('Delete this photo? This action cannot be undone.')">
+                                <input type="hidden" name="<?= csrf_token() ?>" value="<?= csrf_hash() ?>">
+                                <button class="action-btn" type="submit">Delete Photo</button>
+                            </form>
+                        </div>
+                    `
                     : `<span class="pill pill-muted">N/A</span>`;
                 return `
                     <tr class="report-row">
@@ -476,7 +490,7 @@
                         <td>${title}</td>
                         <td>${reason}</td>
                         <td>${created}</td>
-                        <td>${link}</td>
+                        <td>${actions}</td>
                     </tr>
                 `;
             }).join('');

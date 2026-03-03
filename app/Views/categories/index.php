@@ -14,6 +14,10 @@
         a { color: #4f46e5; text-decoration: none; }
         a:hover { text-decoration: underline; }
         .empty { color: #888; }
+        .top-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
+        .action-btn { display:inline-block; padding:0.5rem 1.2rem; border-radius:6px; text-decoration:none; }
+        .action-back { background:#fff; color:#4f46e5; border:1px solid #4f46e5; }
+        .action-add { background:#4f46e5; color:#fff; border:1px solid #4f46e5; }
     </style>
 </head>
 <body>
@@ -24,9 +28,10 @@
     </p>
 <?php endif; ?>
 
-<a href="/categories/create" style="display:inline-block; margin-bottom:1rem; background:#4f46e5; color:#fff; padding:0.5rem 1.2rem; border-radius:6px; text-decoration:none;">
-    + Add Category
-</a>
+<div class="top-actions">
+    <a href="/photos/create" class="action-btn action-back">&larr; Back</a>
+    <a href="/categories/create" class="action-btn action-add">+ Add Category</a>
+</div>
 
     <?php if (empty($categories)): ?>
         <p class="empty">No categories found.</p>
