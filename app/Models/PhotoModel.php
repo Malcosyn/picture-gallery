@@ -82,8 +82,7 @@ class PhotoModel extends Model
     public function search(array $filters = [])
     {
         $builder = $this->db->table('photos p')
-            ->select('p.*, a.title as album_title, c.name as category_name, u.username as photographer')
-            ->join('albums a', 'a.id = p.album_id', 'left')
+            ->select('p.*, c.name as category_name, u.username as photographer')
             ->join('categories c', 'c.id = p.category_id')
             ->join('users u', 'u.id = p.photographer_id', 'left');
 
