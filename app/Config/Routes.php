@@ -62,4 +62,6 @@ $routes->group('', ['filter' => 'auth'], function ($routes) {
     $routes->post('/admin/users/(:num)/delete', 'AdminController::deleteUser/$1', ['filter' => 'admin']);
     $routes->post('/admin/users/(:num)/update', 'AdminController::updateUser/$1', ['filter' => 'admin']);
     $routes->post('/admin/photos/(:num)/delete', 'AdminController::deletePhoto/$1', ['filter' => 'admin']);
+    $routes->post('/admin/categories/store', 'AdminController::storeCategory', ['filter' => 'admin']);
+    $routes->post('/admin/categories/(:num)/delete', 'AdminController::deleteCategory/$1', ['filter' => 'admin']);
 });

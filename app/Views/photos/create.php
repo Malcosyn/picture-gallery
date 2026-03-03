@@ -17,9 +17,6 @@
         button:hover { background: #4338ca; }
         a { color: #4f46e5; text-decoration: none; display: inline-block; margin-top: 1rem; }
         .actions { margin-top: 0.4rem; }
-        .category-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem; }
-        .category-header label { margin-bottom: 0; }
-        .category-link { margin-top: 0; border: 1px solid #4f46e5; border-radius: 6px; padding: 0.35rem 0.7rem; font-size: 0.85rem; background: #fff; }
     </style>
 </head>
 <body>
@@ -57,10 +54,7 @@
 mark for later -->
 
             <div class="form-group">
-                <div class="category-header">
-                    <label for="category_id">Category</label>
-                    <a href="/categories" class="category-link">Go to Categories</a>
-                </div>
+                <label for="category_id">Category</label>
                 <select id="category_id" name="category_id">
                     <option value="">-- Select Category --</option>
                     <?php foreach ($categories as $cat): ?>
