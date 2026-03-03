@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Controllers\BaseController;
+use App\Models\CategoryModel;
 use App\Models\PhotoModel;
 use App\Models\ReportModel;
 use App\Models\UserModel;
@@ -13,6 +14,7 @@ class AdminController extends BaseController
     {
         $reportModel = new ReportModel();
         $userModel = new UserModel();
+        $categoryModel = new CategoryModel();
 
         $reportedPhotos = $reportModel
             ->select('reports.*, photos.title, photos.image_path, photos.id as photo_id')
@@ -24,11 +26,17 @@ class AdminController extends BaseController
             ->orderBy('id', 'DESC')
             ->findAll();
 
+        $categories = $categoryModel
+            ->orderBy('id', 'DESC')
+            ->findAll();
+
         return view('admin/index', [
             'reportedPhotos' => $reportedPhotos,
             'users' => $users,
+            'categories' => $categories,
             'reportedCount' => count($reportedPhotos),
             'userCount' => count($users),
+            'categoryCount' => count($categories),
         ]);
     }
 
@@ -76,9 +84,63 @@ class AdminController extends BaseController
             ]);
         }
 
+        if ($section === 'categories') {
+            $categoryModel = new CategoryModel();
+            $builder = $categoryModel->orderBy('id', 'DESC');
+
+            if ($q !== '') {
+                $builder->groupStart()
+                    ->like('name', $q)
+                    ->orLike('slug', $q)
+                    ->groupEnd();
+            }
+
+            return $this->response->setJSON([
+                'section' => 'categories',
+                'data' => $builder->findAll(),
+            ]);
+        }
+
         return $this->response->setStatusCode(400)->setJSON([
             'error' => 'Invalid section',
         ]);
+    }
+
+    public function storeCategory()
+    {
+        $categoryModel = new CategoryModel();
+
+        $rules = [
+            'name' => 'required|min_length[2]|max_length[100]',
+            'slug' => 'required|min_length[2]|max_length[100]|is_unique[categories.slug]',
+        ];
+
+        if (!$this->validate($rules)) {
+            return redirect()->to('/admin#categories')
+                ->withInput()
+                ->with('categoryErrors', $this->validator->getErrors());
+        }
+
+        $categoryModel->insert([
+            'name' => trim((string) $this->request->getPost('name')),
+            'slug' => trim((string) $this->request->getPost('slug')),
+        ]);
+
+        return redirect()->to('/admin#categories')->with('categorySuccess', 'Category added successfully.');
+    }
+
+    public function deleteCategory(int $id)
+    {
+        $categoryModel = new CategoryModel();
+        $category = $categoryModel->find($id);
+
+        if (!$category) {
+            return redirect()->to('/admin#categories')->with('categoryError', 'Category not found.');
+        }
+
+        $categoryModel->delete($id);
+
+        return redirect()->to('/admin#categories')->with('categorySuccess', 'Category deleted successfully.');
     }
 
     public function userDetail(int $id)
